@@ -17,6 +17,7 @@
 		DC4127CC15D3C3B800AF306A /* ISHTargetsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DC4127CB15D3C3B800AF306A /* ISHTargetsTableViewController.m */; };
 		DC4127CF15D3C96400AF306A /* ISHTargetsComparisonController.m in Sources */ = {isa = PBXBuildFile; fileRef = DC4127CE15D3C96400AF306A /* ISHTargetsComparisonController.m */; };
 		DC4127D915D3F32200AF306A /* flag_ok.png in Resources */ = {isa = PBXBuildFile; fileRef = DC4127D815D3F32200AF306A /* flag_ok.png */; };
+		DC4127DD15D4058D00AF306A /* XcodeEditor.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = DC4127B515D3BEE200AF306A /* XcodeEditor.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +36,20 @@
 			remoteInfo = XcodeEditor;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		DC4127DC15D4053000AF306A /* Copy Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				DC4127DD15D4058D00AF306A /* XcodeEditor.framework in Copy Frameworks */,
+			);
+			name = "Copy Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		DC41278915D3BD9700AF306A /* TargetCompare.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TargetCompare.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -160,6 +175,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = DC4127A715D3BD9700AF306A /* Build configuration list for PBXNativeTarget "TargetCompare" */;
 			buildPhases = (
+				DC4127DC15D4053000AF306A /* Copy Frameworks */,
 				DC41278515D3BD9700AF306A /* Sources */,
 				DC41278615D3BD9700AF306A /* Frameworks */,
 				DC41278715D3BD9700AF306A /* Resources */,
@@ -339,6 +355,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TargetCompare/TargetCompare-Prefix.pch";
 				INFOPLIST_FILE = "TargetCompare/TargetCompare-Info.plist";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -351,6 +368,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TargetCompare/TargetCompare-Prefix.pch";
 				INFOPLIST_FILE = "TargetCompare/TargetCompare-Info.plist";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

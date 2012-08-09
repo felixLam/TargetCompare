@@ -9,7 +9,7 @@
 #import "ISHTargetsTableViewController.h"
 #import <XcodeEditor/XCProject.h>
 
-NSString const *kUserDefaultsPathKey = @"UserDefaultsPathKey";
+NSString const *kUserDefaultsPathKey = @"ISHUserDefaultsPathKey";
 
 @interface ISHTargetsTableViewController ()
 @property (strong) NSString * projectFilePath;
@@ -22,11 +22,11 @@ NSString const *kUserDefaultsPathKey = @"UserDefaultsPathKey";
     [self setProjectFilePath:[[NSUserDefaults standardUserDefaults] stringForKey:(NSString *)kUserDefaultsPathKey]];
     
     [self.readProjectButton setEnabled:[[self projectFilePath] length]];
-    [self.filePathTextField setStringValue:self.projectFilePath];
-    
+        
     [self.startComparisonButton setEnabled:NO];
     
     if (self.projectFilePath) {
+        [self.filePathTextField setStringValue:self.projectFilePath];
         [self readProject:self.readProjectButton];
     }
 }
