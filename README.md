@@ -1,6 +1,6 @@
 # TargetCompare
 
-This is a simple map application that allows you to quickly compare two targets 
+This is a simple mac application that allows you to quickly compare two targets 
 of a Xcode project.
 
 ## Planned features
