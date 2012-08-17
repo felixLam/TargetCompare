@@ -29,16 +29,19 @@
     [[self leftTargetTitle] setTitleWithMnemonic:targetLeft.name];
     [[self rightTargetTitle] setTitleWithMnemonic:targetRight.name];
     
-    // create set of fullpaths
+    // create set of paths of target members
     NSArray *leftPathsArray = [targetLeft.members valueForKeyPath:@"pathRelativeToProjectRoot"];
     NSArray *rightPathsArray = [targetRight.members valueForKeyPath:@"pathRelativeToProjectRoot"];
     
+    // add paths to targets' resources
     leftPathsArray = [leftPathsArray arrayByAddingObjectsFromArray:[targetLeft.resources valueForKeyPath:@"pathRelativeToProjectRoot"]];
     rightPathsArray = [rightPathsArray arrayByAddingObjectsFromArray:[targetRight.resources valueForKeyPath:@"pathRelativeToProjectRoot"]];
     
+    // create set from arrays
     NSSet *leftPaths = [NSSet setWithArray:leftPathsArray];
     NSSet *rightPaths = [NSSet setWithArray:rightPathsArray];
     
+    // substract the to set from each other to identify missing elements
     NSMutableSet *membersMissingInLeft = [NSMutableSet setWithSet:rightPaths];
     [membersMissingInLeft minusSet:leftPaths];
     NSMutableSet *membersMissingInRight = [NSMutableSet setWithSet:leftPaths];

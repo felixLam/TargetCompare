@@ -393,6 +393,7 @@
 				DC4127A915D3BD9700AF306A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -8,12 +8,5 @@
 
 #import "ISHAppDelegate.h"
 
-
-
-
 @implementation ISHAppDelegate
-
-- (void)applicationDidFinishLaunching:(NSNotification *)aNotification{
-}
-
 @end

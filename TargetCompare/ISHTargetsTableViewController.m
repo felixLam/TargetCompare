@@ -19,18 +19,31 @@ NSString const *kUserDefaultsPathKey = @"ISHUserDefaultsPathKey";
 @implementation ISHTargetsTableViewController
 
 -(void)awakeFromNib {
+    // reset project file path from defaults
     [self setProjectFilePath:[[NSUserDefaults standardUserDefaults] stringForKey:(NSString *)kUserDefaultsPathKey]];
     
-    [self.readProjectButton setEnabled:[[self projectFilePath] length]];
-        
-    [self.startComparisonButton setEnabled:NO];
+    [self updateButtonsStates];
     
-    if (self.projectFilePath) {
+    if (self.projectFilePath) {        
+        // if project is not empty set the path text field
         [self.filePathTextField setStringValue:self.projectFilePath];
+        // read project
         [self readProject:self.readProjectButton];
     }
 }
 
+- (void)updateButtonsStates {
+    // read button is enabled if project file path has length
+    [self.readProjectButton setEnabled:[[self projectFilePath] length]];
+    
+    // comparison button should only be enabled if two different targets are selected
+    NSInteger selectedIndexLeft = [self.targetsTableViewLeft selectedRow];
+    NSInteger selectedIndexRight = [self.targetsTableViewRight selectedRow];
+    
+    BOOL comparisonPossible = (selectedIndexLeft >= 0 && selectedIndexRight >= 0 && selectedIndexLeft != selectedIndexRight);
+    
+    [self.startComparisonButton setEnabled:comparisonPossible];
+}
 
 - (IBAction)selectFilePath:(id)sender {
     NSInteger result = 0;
@@ -49,13 +62,18 @@ NSString const *kUserDefaultsPathKey = @"ISHUserDefaultsPathKey";
             NSURL *selectedUrl = [filesToOpen objectAtIndex:i];
             NSString *aFile = [selectedUrl relativePath];
             
+            // set file path of project
             [self setProjectFilePath:aFile];
+            // show in text field
             [self.filePathTextField setStringValue:aFile];
+            // make it persistent via userdefaults
             [[NSUserDefaults standardUserDefaults] setObject:aFile forKey:(NSString *)kUserDefaultsPathKey];
         }
     }
     
-    [self.readProjectButton setEnabled:[[self projectFilePath] length]];
+    [self readProject:self.readProjectButton];
+    
+    [self updateButtonsStates];
 }
 
 - (IBAction)readProject:(id)sender {
@@ -63,12 +81,15 @@ NSString const *kUserDefaultsPathKey = @"ISHUserDefaultsPathKey";
         return;
     }
     
+    // get project from path
     XCProject *project = [XCProject projectWithFilePath:self.projectFilePath];
-    NSLog(@"targets: %@", [project targets]);
     
     [self setProject:project];
+    
+    // reload target table view (will fetch targets from project)
     [self.targetsTableViewLeft reloadData];
     [self.targetsTableViewRight reloadData];
+    [self updateButtonsStates];
 }
 
 #pragma mark - NSTableViewDataSource
@@ -85,12 +106,7 @@ NSString const *kUserDefaultsPathKey = @"ISHUserDefaultsPathKey";
 }
 
 - (void)tableViewSelectionDidChange:(NSNotification *)aNotification {
-    NSInteger selectedIndexLeft = [self.targetsTableViewLeft selectedRow];
-    NSInteger selectedIndexRight = [self.targetsTableViewRight selectedRow];
-
-    BOOL comparisonPossible = (selectedIndexLeft >= 0 && selectedIndexRight >= 0 && selectedIndexLeft != selectedIndexRight);
-    
-    [self.startComparisonButton setEnabled:comparisonPossible];
+    [self updateButtonsStates];
 }
 
 - (IBAction)startComparison:(id)sender {
@@ -98,11 +114,19 @@ NSString const *kUserDefaultsPathKey = @"ISHUserDefaultsPathKey";
     NSInteger selectedIndexLeft = [self.targetsTableViewLeft selectedRow];
     NSInteger selectedIndexRight = [self.targetsTableViewRight selectedRow];
     
-    XCTarget *targetLeft = [self.project.targets objectAtIndex:selectedIndexLeft];
-    XCTarget *targetRight = [self.project.targets objectAtIndex:selectedIndexRight];
-    
+    XCTarget *targetLeft = [self targetAtIndex:selectedIndexLeft];
+    XCTarget *targetRight = [self targetAtIndex:selectedIndexRight];
     
     
     [self.targetComparisonController compareLeftTarget:targetLeft withRightTarget:targetRight];
 }
+
+- (XCTarget*)targetAtIndex:(NSUInteger)index {
+    if (index >= self.project.targets.count) {
+        return nil;
+    }
+    
+    return [self.project.targets objectAtIndex:index];
+}
+
 @end
