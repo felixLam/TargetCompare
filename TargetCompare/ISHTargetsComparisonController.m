@@ -15,27 +15,40 @@
 
 
 @implementation ISHTargetsComparisonController
+- (id)initWithLeftTarget:(XCTarget *)leftTarget rightTarget:(XCTarget *)rightTarget {
+    self = [super initWithWindowNibName:@"ISHTargetsComparisonController"];
+
+    if (self) {
+        [self setTargetLeft:leftTarget];
+        [self setTargetRight:rightTarget];
+    }
+
+    return self;
+}
 
 - (void)showResults {
     
     BOOL showTables = (self.membersMissingInTargetRight.count + self.membersMissingInTargetLeft.count > 0);
     [self.imageView setHidden:showTables];
     [self.tableContainerView setHidden:!showTables];
-    
+
+    [self.tableViewLeft reloadData];
+    [self.tableViewRight reloadData];
+
     [[self window] makeKeyAndOrderFront:nil];
 }
 
-- (void)compareLeftTarget:(XCTarget *)targetLeft withRightTarget:(XCTarget *)targetRight {
-    [[self leftTargetTitle] setTitleWithMnemonic:targetLeft.name];
-    [[self rightTargetTitle] setTitleWithMnemonic:targetRight.name];
+- (void)windowDidLoad {
+    [[self leftTargetTitle] setTitleWithMnemonic:self.targetLeft.name];
+    [[self rightTargetTitle] setTitleWithMnemonic:self.targetRight.name];
     
     // create set of paths of target members
-    NSArray *leftPathsArray = [targetLeft.members valueForKeyPath:@"pathRelativeToProjectRoot"];
-    NSArray *rightPathsArray = [targetRight.members valueForKeyPath:@"pathRelativeToProjectRoot"];
+    NSArray *leftPathsArray = [self.targetLeft.members valueForKeyPath:@"pathRelativeToProjectRoot"];
+    NSArray *rightPathsArray = [self.targetRight.members valueForKeyPath:@"pathRelativeToProjectRoot"];
     
     // add paths to targets' resources
-    leftPathsArray = [leftPathsArray arrayByAddingObjectsFromArray:[targetLeft.resources valueForKeyPath:@"pathRelativeToProjectRoot"]];
-    rightPathsArray = [rightPathsArray arrayByAddingObjectsFromArray:[targetRight.resources valueForKeyPath:@"pathRelativeToProjectRoot"]];
+    leftPathsArray = [leftPathsArray arrayByAddingObjectsFromArray:[self.targetLeft.resources valueForKeyPath:@"pathRelativeToProjectRoot"]];
+    rightPathsArray = [rightPathsArray arrayByAddingObjectsFromArray:[self.targetRight.resources valueForKeyPath:@"pathRelativeToProjectRoot"]];
     
     // create set from arrays
     NSSet *leftPaths = [NSSet setWithArray:leftPathsArray];
@@ -49,12 +62,9 @@
     
     [self setMembersMissingInTargetLeft:[membersMissingInLeft.allObjects sortedArrayUsingSelector:@selector(compare:)]];
     [self setMembersMissingInTargetRight:[membersMissingInRight.allObjects sortedArrayUsingSelector:@selector(compare:)]];
-    
-    [self.tableViewLeft reloadData];
-    [self.tableViewRight reloadData];
-    
-    [self showResults];
+
 }
+
 #pragma mark - NSTableViewDataSource
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
 {

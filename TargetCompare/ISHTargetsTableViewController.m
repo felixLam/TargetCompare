@@ -118,7 +118,8 @@ NSString const *kUserDefaultsPathKey = @"ISHUserDefaultsPathKey";
     XCTarget *targetRight = [self targetAtIndex:selectedIndexRight];
     
     
-    [self.targetComparisonController compareLeftTarget:targetLeft withRightTarget:targetRight];
+    [self setTargetComparisonController:[[ISHTargetsComparisonController alloc] initWithLeftTarget:targetLeft rightTarget:targetRight]];
+    [self.targetComparisonController showResults];
 }
 
 - (XCTarget*)targetAtIndex:(NSUInteger)index {

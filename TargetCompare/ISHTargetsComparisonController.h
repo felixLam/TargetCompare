@@ -10,8 +10,7 @@
 
 #import <XcodeEditor/XCTarget.h>
 
-@interface ISHTargetsComparisonController : NSObject <NSTableViewDataSource, NSTableViewDelegate>
-@property (strong) IBOutlet NSWindow *window;
+@interface ISHTargetsComparisonController : NSWindowController <NSTableViewDataSource, NSTableViewDelegate>
 @property (weak) IBOutlet NSView *tableContainerView;
 @property (weak) IBOutlet NSTableView *tableViewLeft;
 @property (weak) IBOutlet NSTableView *tableViewRight;
@@ -20,5 +19,10 @@
 @property (weak) IBOutlet NSTextField *rightTargetTitle;
 @property (weak) IBOutlet NSImageView *imageView;
 
-- (void)compareLeftTarget:(XCTarget*)targetLeft withRightTarget:(XCTarget*)targetRight;
+@property (strong) XCTarget *targetLeft;
+@property (strong) XCTarget *targetRight;
+
+- (id)initWithLeftTarget:(XCTarget *)leftTarget rightTarget:(XCTarget *)rightTarget;
+
+- (void)showResults;
 @end
